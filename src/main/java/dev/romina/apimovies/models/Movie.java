@@ -1,10 +1,16 @@
 package dev.romina.apimovies.models;
 
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,9 +21,20 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id_movie")
     private Long id;
 
+    @ManyToMany
+    @JoinTable(
+        name = "genres_movies",
+        joinColumns = @JoinColumn(name = "movie_id"),
+        inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    private Set<Genre> genres;
+
     private String title;
     private String description;
     private Long running_time;
+
+    @ManyToOne
+    @JoinColumn(name = "year_id", nullable = true)
+    private Year creation_year;
     
     public Movie() {
     }
@@ -34,6 +51,14 @@ public class Movie {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Set<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(Set<Genre> genres) {
+        this.genres = genres;
     }
 
     public String getTitle() {
@@ -59,4 +84,13 @@ public class Movie {
     public void setRunning_time(Long running_time) {
         this.running_time = running_time;
     }
+
+    public Year getCreation_year() {
+        return creation_year;
+    }
+
+    public void setCreation_year(Year creation_year) {
+        this.creation_year = creation_year;
+    }
+    
 }
